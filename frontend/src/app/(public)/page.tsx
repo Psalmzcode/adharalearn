@@ -121,7 +121,7 @@ export default function BootcampHomePage() {
         <div className="orb" style={{ width:600,height:600,background:'var(--teal)',top:-200,right:-100 }} />
         <div className="orb" style={{ width:500,height:500,background:'var(--gold)',bottom:-150,left:-100 }} />
         <div className="section-inner" style={{ width:'100%',position:'relative',zIndex:2 }}>
-          <div style={{ display:'grid', gridTemplateColumns:'1.1fr 0.9fr', gap:26, alignItems:'center' }}>
+          <div className="home-hero-grid">
           <div style={{ maxWidth:760 }} className="motion-in">
             <div style={{ display:'inline-flex',alignItems:'center',gap:8,background:'rgba(240,165,0,0.1)',border:'1px solid rgba(240,165,0,0.35)',borderRadius:20,padding:'6px 14px',marginBottom:28 }}>
               <span style={{ width:7,height:7,borderRadius:'50%',background:'var(--gold)',boxShadow:'0 0 8px var(--gold)' }} />
@@ -170,7 +170,7 @@ export default function BootcampHomePage() {
       {/* Stats */}
       <section style={{ padding:'60px 0',borderTop:'1px solid var(--border)',borderBottom:'1px solid var(--border)',background:'var(--bg2)' }}>
         <div className="section-inner">
-          <div style={{ display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:24 }}>
+          <div className="stats-grid home-stats-grid">
             {[{val:'1,240+',lbl:'Graduates'},{val:'84%',lbl:'Placement Rate'},{val:'3',lbl:'Tracks Available'},{val:'12 Weeks',lbl:'Average Duration'}].map(s=>(
               <div key={s.lbl} style={{ textAlign:'center' }}>
                 <div style={{ fontFamily:'var(--font-display)',fontWeight:900,fontSize:36,color:'var(--gold)',marginBottom:6 }}>{s.val}</div>
@@ -199,7 +199,7 @@ export default function BootcampHomePage() {
             <div style={{ display:'flex',flexDirection:'column',gap:24 }}>
               {COHORTS.map((c,i)=>(
                 <div key={i} className="card motion-in" style={{ borderLeft:`3px solid ${i===0?'#3B82F6':i===1?'var(--teal)':'#8B5CF6'}`,padding:32 }}>
-                  <div style={{ display:'grid',gridTemplateColumns:'1fr auto',gap:32,alignItems:'start' }}>
+                  <div className="home-cohort-card-grid">
                     <div>
                       <div className="program-thumb" data-track={i===0?'web':i===1?'data':'ai'}>
                         <span>{i===0 ? 'Build and deploy modern websites' : i===1 ? 'Analyze and visualize real datasets' : 'Design practical AI workflows'}</span>
@@ -210,7 +210,7 @@ export default function BootcampHomePage() {
                       </div>
                       <h3 style={{ fontFamily:'var(--font-display)',fontWeight:800,fontSize:24,color:'var(--text)',marginBottom:8 }}>{c.title}</h3>
                       <p style={{ fontSize:14,color:'var(--muted)',marginBottom:20,lineHeight:1.7 }}>{c.desc}</p>
-                      <div style={{ display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:20 }}>
+                      <div className="home-metrics-grid">
                         {[{lbl:'DURATION',val:c.duration},{lbl:'FORMAT',val:c.format},{lbl:'FEE',val:c.price}].map(m=>(
                           <div key={m.lbl} style={{ padding:14,background:'var(--surface2)',borderRadius:'var(--radius)' }}>
                             <div style={{ fontSize:11,color:'var(--muted)',fontFamily:'var(--font-mono)',marginBottom:4 }}>{m.lbl}</div>
@@ -272,7 +272,7 @@ export default function BootcampHomePage() {
             <div className="section-label">Graduate Stories</div>
             <h2 className="section-title">Real results from real people</h2>
           </div>
-          <div style={{ display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:20 }}>
+          <div className="home-testi-grid">
             {TESTIMONIALS.map((t,i)=>(
               <div key={i} className="testi-card motion-in">
                 <div style={{ color:'var(--gold)',fontSize:13,letterSpacing:2,marginBottom:12 }}>★★★★★</div>
@@ -325,7 +325,7 @@ export default function BootcampHomePage() {
         <div className="section-inner" style={{ display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:20 }}>
           <BootcampLogo />
           <p style={{ fontSize:13,color:'var(--muted)' }}>© 2026 AdharaEdu Bootcamp · Lagos, Nigeria</p>
-          <div style={{ display:'flex',gap:24 }}>
+          <div className="home-footer-links">
             {['Privacy','Terms','Contact'].map(l=><a key={l} style={{ fontSize:13,color:'var(--muted)',cursor:'pointer' }}>{l}</a>)}
           </div>
         </div>

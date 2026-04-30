@@ -316,6 +316,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .learn-roadmap-title { font-family: var(--font-display); font-weight: 900; font-size: 16px; }
 .learn-roadmap-desc { color: var(--muted); font-size: 13px; line-height: 1.7; margin-top: 6px; }
 .learn-roadmap-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.learn-trackpage .badge { max-width: 100%; white-space: normal; line-height: 1.35; }
+.learn-trackpage .learn-roadmap-meta .badge { align-items: flex-start; text-align: left; }
 
 @media (max-width: 1024px) {
   .learn-hero { grid-template-columns: 1fr; }
@@ -328,6 +330,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .learn-track-hero { grid-template-columns: 1fr; }
   .learn-track-bullets { grid-template-columns: 1fr; }
   .learn-roadmap-step { grid-template-columns: 52px 1fr; }
+}
+
+@media (max-width: 640px) {
+  .learn-track-hero-cta { display: grid; grid-template-columns: 1fr; }
+  .learn-track-hero-cta .btn { width: 100%; justify-content: center; }
+  .learn-roadmap-step { grid-template-columns: 44px 1fr; padding: 12px; }
+  .learn-roadmap-num { width: 44px; height: 44px; border-radius: 14px; }
+  .learn-roadmap-title { font-size: 15px; }
 }
 
 /* ─── BUTTONS (exact from HTML) ─────────────────────────────────────────────── */

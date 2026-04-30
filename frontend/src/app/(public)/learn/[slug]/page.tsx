@@ -197,8 +197,8 @@ export default function LearnCoursePage({ params }: { params: { slug: string } }
                             )}
                             <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
                               {((m.lessons ?? []) as any[]).slice(0, 5).map((l: any) => (
-                                <div key={l.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 10, background: 'var(--surface)' }}>
-                                  <div style={{ fontSize: 12, color: 'var(--text)', fontWeight: 650, minWidth: 0 }}>
+                                <div key={l.id} className="learn-course-lesson-row">
+                                  <div className="learn-course-lesson-title">
                                     {l.order}. {l.title}
                                   </div>
                                   {l.access === 'PREVIEW' ? (

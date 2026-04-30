@@ -250,6 +250,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .learn-footer-cta-title { font-family: var(--font-display); font-weight: 900; font-size: 22px; }
 .learn-footer-cta-sub { color: var(--muted); font-size: 13px; margin-top: 6px; }
 
+/* Public course page layout */
+.learn-course-layout { display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: start; }
+
 /* Learn modal (Browse courses per track) */
 .learn-modal-overlay { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; }
 .learn-modal-backdrop { position: absolute; inset: 0; background: rgba(6,10,18,0.72); backdrop-filter: blur(10px); border: none; }
@@ -327,6 +330,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .learn-image-card { min-height: 320px; }
   .learn-modal-grid { grid-template-columns: 1fr; height: auto; }
   .learn-modal-list { max-height: 220px; border-right: none; border-bottom: 1px solid var(--border); }
+  .learn-course-layout { grid-template-columns: 1fr; }
   .learn-track-hero { grid-template-columns: 1fr; }
   .learn-track-bullets { grid-template-columns: 1fr; }
   .learn-roadmap-step { grid-template-columns: 52px 1fr; }

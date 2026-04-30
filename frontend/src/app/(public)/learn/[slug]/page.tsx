@@ -101,7 +101,7 @@ export default function LearnCoursePage({ params }: { params: { slug: string } }
         ) : !course ? (
           <div className="card">Course not found.</div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 16, alignItems: 'start' }}>
+          <div className="learn-course-layout">
             <div>
               <div className="section-label">Adhara Learn Course</div>
               <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(28px,4vw,44px)', color: 'var(--text)', marginBottom: 8 }}>

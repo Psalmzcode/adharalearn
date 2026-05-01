@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { authApi, learnersApi, setAccessToken, setRefreshToken } from '@/lib/api';
 import { useAuthStore } from '@/store/auth.store';
+import { PublicNavbar } from '@/components/public/PublicNavbar';
 
 const STEPS = ['Account', 'About You'];
 
@@ -74,6 +75,7 @@ export default function SignupPage() {
 
   return (
     <div style={{ background: 'var(--bg)', minHeight: '100vh', paddingTop: 64, fontFamily: 'var(--font-body)' }}>
+      <PublicNavbar />
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '48px 24px' }}>
         <button onClick={() => router.push('/login')} style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 13, fontFamily: 'var(--font-mono)', cursor: 'pointer', marginBottom: 20 }}>
           ← Back to Login

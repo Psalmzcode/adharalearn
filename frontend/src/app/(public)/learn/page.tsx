@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { coursesApi } from '@/lib/api';
 import { learnPricingSummary, type PublicCourseListItem } from '@/lib/learn-pricing';
+import { PublicNavbar } from '@/components/public/PublicNavbar';
 
 type TrackKey = 'web' | 'data' | 'ai';
 
@@ -65,6 +66,60 @@ function useScrollReveal() {
     nodes.forEach((n) => io.observe(n));
     return () => io.disconnect();
   }, []);
+}
+
+function useMobileProofCarousel(ref: RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let timer: number | undefined;
+    let cancelled = false;
+
+    const isMobile = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches;
+
+    const start = () => {
+      if (!isMobile()) return;
+      if (timer) window.clearInterval(timer);
+      timer = window.setInterval(() => {
+        if (!el || cancelled) return;
+        const max = el.scrollWidth - el.clientWidth - 2;
+        if (max <= 0) return;
+        const next = el.scrollLeft + Math.max(220, Math.floor(el.clientWidth * 0.72));
+        if (next >= max) el.scrollTo({ left: 0, behavior: 'smooth' });
+        else el.scrollTo({ left: next, behavior: 'smooth' });
+      }, 4200);
+    };
+
+    const stop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = undefined;
+    };
+
+    const mq = window.matchMedia('(max-width: 640px)');
+    const onChange = () => {
+      stop();
+      start();
+    };
+
+    start();
+    mq.addEventListener('change', onChange);
+
+    const onPointerDown = () => stop();
+    const onPointerUp = () => start();
+    el.addEventListener('pointerdown', onPointerDown);
+    el.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('pointercancel', onPointerUp);
+
+    return () => {
+      cancelled = true;
+      stop();
+      mq.removeEventListener('change', onChange);
+      el.removeEventListener('pointerdown', onPointerDown);
+      el.removeEventListener('pointerup', onPointerUp);
+      el.removeEventListener('pointercancel', onPointerUp);
+    };
+  }, [ref]);
 }
 
 function TrackCoursesModal(props: {
@@ -169,6 +224,8 @@ export default function LearnLandingPage() {
   const router = useRouter();
   useScrollReveal();
   const [trackModal, setTrackModal] = useState<TrackKey | null>(null);
+  const proofCarouselRef = useRef<HTMLDivElement | null>(null);
+  useMobileProofCarousel(proofCarouselRef);
 
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses-public'],
@@ -193,6 +250,7 @@ export default function LearnLandingPage() {
 
   return (
     <div className="learn-landing">
+      <PublicNavbar />
       <div className="section-inner" style={{ paddingTop: 64 }}>
         <button
           onClick={() => router.push('/')}
@@ -255,35 +313,37 @@ export default function LearnLandingPage() {
             <div className="learn-section-title">Built for beginners. Designed for real progress.</div>
             <div className="learn-section-sub">Start small, stay supported, and build projects you can show.</div>
           </div>
-          <div className="learn-proof-row learn-proof-row-lg" data-reveal>
-            {[
-              {
-                k: 'Start Completely Free',
-                v: 'No credit card. No upfront fee. Just create an account and start learning right now. You only pay when you decide to go deeper.',
-                icon: '✅',
-              },
-              {
-                k: 'Pay small small',
-                v: 'No big upfront cost. Pay per course or bundle as you go.',
-                icon: '💳',
-              },
-              {
-                k: 'Live help',
-                v: 'Stuck on something? Our tutors are real humans who actually help. Ask questions, get answers, keep moving. You never have to get stuck alone.',
-                icon: '🧑‍🏫',
-              },
-              {
-                k: 'Graduate with a portfolio',
-                v: 'Complete your track, graduate with a real portfolio, and start freelancing, applying, or launching your career.',
-                icon: '🧩',
-              },
-            ].map((x) => (
-              <div key={x.k} className="learn-proof-card learn-proof-card-lg">
-                <div className="learn-proof-icon">{x.icon}</div>
-                <div className="learn-proof-k">{x.k}</div>
-                <div className="learn-proof-v">{x.v}</div>
-              </div>
-            ))}
+          <div ref={proofCarouselRef} className="learn-proof-carousel" data-reveal>
+            <div className="learn-proof-row learn-proof-row-lg learn-proof-row-mobile">
+              {[
+                {
+                  k: 'Start Completely Free',
+                  v: 'No credit card. No upfront fee. Just create an account and start learning right now. You only pay when you decide to go deeper.',
+                  icon: '✅',
+                },
+                {
+                  k: 'Pay small small',
+                  v: 'No big upfront cost. Pay per course or bundle as you go.',
+                  icon: '💳',
+                },
+                {
+                  k: 'Live help',
+                  v: 'Stuck on something? Our tutors are real humans who actually help. Ask questions, get answers, keep moving. You never have to get stuck alone.',
+                  icon: '🧑‍🏫',
+                },
+                {
+                  k: 'Graduate with a portfolio',
+                  v: 'Complete your track, graduate with a real portfolio, and start freelancing, applying, or launching your career.',
+                  icon: '🧩',
+                },
+              ].map((x) => (
+                <div key={x.k} className="learn-proof-card learn-proof-card-lg learn-proof-slide">
+                  <div className="learn-proof-icon">{x.icon}</div>
+                  <div className="learn-proof-k">{x.k}</div>
+                  <div className="learn-proof-v">{x.v}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

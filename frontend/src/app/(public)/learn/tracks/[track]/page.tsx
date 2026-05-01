@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { coursesApi } from '@/lib/api';
 import { learnPricingSummary, type PublicCourseListItem } from '@/lib/learn-pricing';
+import { PublicNavbar } from '@/components/public/PublicNavbar';
 
 type TrackKey = 'web' | 'data' | 'ai';
 
@@ -150,6 +151,7 @@ export default function LearnTrackPage({ params }: { params: { track: string } }
   if (!track) {
     return (
       <div className="learn-landing">
+        <PublicNavbar />
         <div className="section-inner" style={{ paddingTop: 64 }}>
           <button onClick={() => router.push('/learn')} style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 13, fontFamily: 'var(--font-mono)', cursor: 'pointer', marginBottom: 16 }}>
             ← Back to Adhara Learn
@@ -162,6 +164,7 @@ export default function LearnTrackPage({ params }: { params: { track: string } }
 
   return (
     <div className="learn-landing learn-trackpage">
+      <PublicNavbar />
       <div className="section-inner" style={{ paddingTop: 64 }}>
         <button onClick={() => router.push('/learn')} style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 13, fontFamily: 'var(--font-mono)', cursor: 'pointer', marginBottom: 16 }}>
           ← Back to Adhara Learn

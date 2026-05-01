@@ -1,9 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
-import { coursesApi } from '@/lib/api';
-import { learnPricingSummary, type PublicCourseListItem } from '@/lib/learn-pricing';
+import { AdharaLearnTracksSection } from '@/components/public/AdharaLearnTracksSection';
 
 const COHORTS = [
   { title:'Full-Stack Web Development', badge:'badge-web', badgeText:'💻 Web Dev', status:'● OPEN', spots:23, duration:'12 Weeks', format:'Online + Live', price:'₦85,000', desc:'From HTML to React + Node.js. Build 3 portfolio projects and graduate job-ready.' },
@@ -16,6 +14,8 @@ const TESTIMONIALS = [
   { quote:"The data analytics bootcamp was intense but worth it. I went from zero Python knowledge to building dashboards at my company.", name:'Ngozi Bello', role:'Data Analyst at Stanbic IBTC', initials:'NB' },
   { quote:"Tobi is an incredible facilitator. The live sessions and Q&As made complex concepts click. Best investment I made.", name:'Aisha Okonkwo', role:'Full-Stack Developer (Freelance)', initials:'AO' },
 ];
+
+const HERO_AUDIENCE_TAGS = ['Student', 'School Leaver', 'NYSC', 'Job Seeker', 'Career Switcher'] as const;
 
 const FAQS = [
   { q:'Do I need prior coding experience?', a:'No. Our Web Dev and Data Analytics tracks start from absolute zero. Dedication and 15+ hours/week is what matters.' },
@@ -39,26 +39,15 @@ function BootcampLogo() {
 export default function BootcampHomePage() {
   const router = useRouter();
   const [openFaq, setOpenFaq] = useState<number|null>(null);
-  const [programTab, setProgramTab] = useState<'cohort' | 'learn'>('cohort');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [heroAudienceIdx, setHeroAudienceIdx] = useState(0);
 
-  const { data: learnCourses = [], isLoading: learnLoading } = useQuery({
-    queryKey: ['courses-public'],
-    queryFn: () => coursesApi.listPublic() as Promise<PublicCourseListItem[]>,
-    staleTime: 60_000,
-  });
-
-  const tabBtn = (active: boolean) => ({
-    padding: '12px 20px',
-    borderRadius: 10,
-    border: `1px solid ${active ? 'var(--gold)' : 'var(--border)'}`,
-    background: active ? 'rgba(240,165,0,0.12)' : 'var(--surface2)',
-    color: active ? 'var(--gold)' : 'var(--muted)',
-    fontWeight: 700,
-    fontSize: 14,
-    cursor: 'pointer',
-    fontFamily: 'var(--font-body)',
-  } as const);
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setHeroAudienceIdx((i) => (i + 1) % HERO_AUDIENCE_TAGS.length);
+    }, 2600);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <div style={{ background:'var(--bg)',minHeight:'100vh',color:'var(--text)',fontFamily:'var(--font-body)' }}>
@@ -89,8 +78,8 @@ export default function BootcampHomePage() {
 
         <div className="home-nav-actions">
           <button className="btn btn-ghost btn-sm" onClick={()=>router.push('/login')}>Sign In</button>
-          <button className="btn btn-gold btn-sm" onClick={()=>router.push('/login')}>Adhara Learn</button>
-          <button className="btn btn-outline btn-sm" onClick={()=>router.push('/learn')}>View Paid Courses</button>
+          <button className="btn btn-gold btn-sm" onClick={()=>router.push('/learn')}>Adhara Learn</button>
+          <button className="btn btn-outline btn-sm" onClick={()=>router.push('/signup')}>Sign up</button>
         </div>
 
         <button
@@ -123,31 +112,44 @@ export default function BootcampHomePage() {
         <div className="section-inner" style={{ width:'100%',position:'relative',zIndex:2 }}>
           <div className="home-hero-grid">
           <div style={{ maxWidth:760 }} className="motion-in">
-            <div style={{ display:'inline-flex',alignItems:'center',gap:8,background:'rgba(240,165,0,0.1)',border:'1px solid rgba(240,165,0,0.35)',borderRadius:20,padding:'6px 14px',marginBottom:28 }}>
-              <span style={{ width:7,height:7,borderRadius:'50%',background:'var(--gold)',boxShadow:'0 0 8px var(--gold)' }} />
-              <span style={{ fontSize:12,fontWeight:700,color:'var(--gold)',fontFamily:'var(--font-mono)' }}>Live cohort · Coming soon · April 2026 target</span>
+            <div style={{ display:'flex',flexWrap:'wrap',alignItems:'center',columnGap:14,rowGap:8,marginBottom:28 }}>
+              <p style={{ display:'inline-flex',alignItems:'center',gap:10,margin:0,fontSize:13,fontWeight:700,color:'var(--muted)',lineHeight:1.55,fontFamily:'var(--font-body)',letterSpacing:'0.06em',textTransform:'uppercase' }}>
+                <span style={{ width:8,height:8,borderRadius:'50%',background:'var(--teal)',flexShrink:0,boxShadow:'0 0 10px rgba(0,212,170,0.55)' }} aria-hidden />
+                Self-paced courses live now
+              </p>
+              <span style={{ color:'var(--muted)',opacity:0.45,userSelect:'none' }} aria-hidden>
+                ·
+              </span>
+              <p style={{ margin:0,fontSize:13,fontWeight:700,color:'var(--gold)',lineHeight:1.55,fontFamily:'var(--font-body)',letterSpacing:'0.06em',textTransform:'uppercase' }}>
+                Cohort waitlist opening soon
+              </p>
             </div>
-            <h1 style={{ fontSize:'clamp(42px,6vw,72px)',lineHeight:1.05,marginBottom:20,fontFamily:'var(--font-display)',fontWeight:900,color:'var(--text)' }}>
-              Build Skills.<br/>
-              <span style={{ background:'linear-gradient(90deg,var(--gold),var(--teal))',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text' }}>Get Hired.</span><br/>
-              Change Your Life.
+            <h1 style={{ fontSize:'clamp(32px,5vw,56px)',lineHeight:1.08,marginBottom:20,fontFamily:'var(--font-display)',fontWeight:900,color:'var(--text)' }}>
+              <span style={{ color:'var(--text)' }}>Nigeria&apos;s Most </span>
+              <span style={{ background:'linear-gradient(90deg,var(--gold),var(--teal))',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text' }}>
+                Practical Tech
+              </span>
+              <span style={{ color:'var(--text)' }}> Training Platform</span>
             </h1>
-            <p style={{ fontSize:17,color:'var(--muted)',maxWidth:520,lineHeight:1.75,marginBottom:36 }}>
-              Intensive 10–12 week tech bootcamps for Nigerians ready to break into Web Development, Data Analytics, and AI.
-              Built for all learners: Student, School Leaver, NYSC, Job Seeker, and Career Switcher.
+            <p style={{ fontSize:17,color:'var(--muted)',maxWidth:560,lineHeight:1.75,marginBottom:22 }}>
+              Learn practical tech skills that can help you earn—through beginner-friendly courses in Web Development, Data Analysis, and AI. Start free, build real projects, and grow at your own pace.
             </p>
-            <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:20 }}>
-              {['Student','School Leaver','NYSC','Job Seeker','Career Switcher'].map((t) => (
-                <span key={t} className="badge" style={{ fontSize:11 }}>{t}</span>
-              ))}
-            </div>
-            <div style={{ marginBottom:36,padding:'14px 16px',background:'var(--surface2)',borderRadius:'var(--radius)',border:'1px solid var(--border)',maxWidth:480 }}>
-              <div style={{ fontSize:11,fontFamily:'var(--font-mono)',color:'var(--muted)',letterSpacing:1,marginBottom:6 }}>COHORT ENROLLMENT</div>
-              <div style={{ fontSize:14,color:'var(--text)',lineHeight:1.6 }}>Cohort applications are <strong>coming soon</strong>. Self-paced paid courses are live on <strong>Adhara Learn</strong> today.</div>
+            <div style={{ marginBottom:28,fontSize:15,lineHeight:1.6 }}>
+              <div className="home-hero-audience-row">
+                <span className="home-hero-audience-label">This is for you if you&apos;re a</span>
+                {HERO_AUDIENCE_TAGS.map((tag, i) => (
+                  <span
+                    key={tag}
+                    className={`home-hero-audience-tag${i === heroAudienceIdx ? ' is-active' : ''}`}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
             <div style={{ display:'flex',gap:14,flexWrap:'wrap' }}>
-              <button className="btn btn-gold btn-lg" onClick={()=>router.push('/login')}>Adhara Learn →</button>
-              <button className="btn btn-outline btn-lg" onClick={()=>router.push('/learn')}>View Paid Courses</button>
+              <button className="btn btn-gold btn-lg" onClick={()=>router.push('/learn')}>Start Learning Free</button>
+              <button className="btn btn-outline btn-lg" onClick={()=>router.push('/apply')}>Join Cohort Waitlist</button>
             </div>
           </div>
           <div className="hero-visual motion-in">
@@ -181,7 +183,9 @@ export default function BootcampHomePage() {
         </div>
       </section>
 
-      {/* Programs: cohort vs Adhara Learn */}
+      <AdharaLearnTracksSection variant="home" />
+
+      {/* Programs: live cohort tracks */}
       <section className="section">
         <div className="section-inner">
           <div style={{ marginBottom:28 }}>
@@ -190,78 +194,46 @@ export default function BootcampHomePage() {
             <p className="section-sub">Live cohort tracks (Web, Data, AI) — enrollment opening after our next intake. Target April 7, 2026; limited spots per track when we open.</p>
           </div>
 
-          <div style={{ display:'flex',gap:10,marginBottom:28,flexWrap:'wrap' }}>
-            <button type="button" style={tabBtn(programTab === 'cohort')} onClick={() => setProgramTab('cohort')}>Live cohort tracks</button>
-            <button type="button" style={tabBtn(programTab === 'learn')} onClick={() => setProgramTab('learn')}>Adhara Learn (paid courses)</button>
-          </div>
-
-          {programTab === 'cohort' ? (
-            <div style={{ display:'flex',flexDirection:'column',gap:24 }}>
-              {COHORTS.map((c,i)=>(
-                <div key={i} className="card motion-in" style={{ borderLeft:`3px solid ${i===0?'#3B82F6':i===1?'var(--teal)':'#8B5CF6'}`,padding:32 }}>
-                  <div className="home-cohort-card-grid">
-                    <div>
-                      <div className="program-thumb" data-track={i===0?'web':i===1?'data':'ai'}>
-                        <span>{i===0 ? 'Build and deploy modern websites' : i===1 ? 'Analyze and visualize real datasets' : 'Design practical AI workflows'}</span>
-                      </div>
-                      <div style={{ display:'flex',alignItems:'center',gap:10,marginBottom:12,flexWrap:'wrap' }}>
-                        <span className={`badge ${c.badge}`}>{c.badgeText}</span>
-                        <span className={`badge ${c.spots>0?'badge-open':'badge-full'}`}>{c.status}{c.spots>0?` — ${c.spots} spots planned`:''}</span>
-                      </div>
-                      <h3 style={{ fontFamily:'var(--font-display)',fontWeight:800,fontSize:24,color:'var(--text)',marginBottom:8 }}>{c.title}</h3>
-                      <p style={{ fontSize:14,color:'var(--muted)',marginBottom:20,lineHeight:1.7 }}>{c.desc}</p>
-                      <div className="home-metrics-grid">
-                        {[{lbl:'DURATION',val:c.duration},{lbl:'FORMAT',val:c.format},{lbl:'FEE',val:c.price}].map(m=>(
-                          <div key={m.lbl} style={{ padding:14,background:'var(--surface2)',borderRadius:'var(--radius)' }}>
-                            <div style={{ fontSize:11,color:'var(--muted)',fontFamily:'var(--font-mono)',marginBottom:4 }}>{m.lbl}</div>
-                            <div style={{ fontWeight:700,fontSize:15,color:'var(--text)' }}>{m.val}</div>
-                          </div>
-                        ))}
-                      </div>
+          <div style={{ display:'flex',flexDirection:'column',gap:24 }}>
+            {COHORTS.map((c,i)=>(
+              <div key={i} className="card motion-in" style={{ borderLeft:`3px solid ${i===0?'#3B82F6':i===1?'var(--teal)':'#8B5CF6'}`,padding:32 }}>
+                <div className="home-cohort-card-grid">
+                  <div>
+                    <div className="program-thumb" data-track={i===0?'web':i===1?'data':'ai'}>
+                      <span>{i===0 ? 'Build and deploy modern websites' : i===1 ? 'Analyze and visualize real datasets' : 'Design practical AI workflows'}</span>
                     </div>
-                    <div style={{ minWidth:160,textAlign:'right' }}>
-                      <div style={{ fontFamily:'var(--font-display)',fontWeight:900,fontSize:28,color:'var(--text)',marginBottom:4 }}>{c.price}</div>
-                      <div style={{ fontSize:12,color:'var(--muted)',marginBottom:16 }}>or 2 instalments (when open)</div>
-                      <button className="btn btn-outline" style={{ width:'100%',justifyContent:'center',marginBottom:8 }} onClick={()=>router.push('/apply')}>Cohort enrollment — Coming soon</button>
-                      <button className="btn btn-ghost" style={{ width:'100%',justifyContent:'center',fontSize:12 }} onClick={()=>{ setProgramTab('learn'); }}>Browse Adhara Learn →</button>
+                    <div style={{ display:'flex',alignItems:'center',gap:10,marginBottom:12,flexWrap:'wrap' }}>
+                      <span className={`badge ${c.badge}`}>{c.badgeText}</span>
+                      <span className={`badge ${c.spots>0?'badge-open':'badge-full'}`}>{c.status}{c.spots>0?` — ${c.spots} spots planned`:''}</span>
+                    </div>
+                    <h3 style={{ fontFamily:'var(--font-display)',fontWeight:800,fontSize:24,color:'var(--text)',marginBottom:8 }}>{c.title}</h3>
+                    <p style={{ fontSize:14,color:'var(--muted)',marginBottom:20,lineHeight:1.7 }}>{c.desc}</p>
+                    <div className="home-metrics-grid">
+                      {[{lbl:'DURATION',val:c.duration},{lbl:'FORMAT',val:c.format},{lbl:'FEE',val:c.price}].map(m=>(
+                        <div key={m.lbl} style={{ padding:14,background:'var(--surface2)',borderRadius:'var(--radius)' }}>
+                          <div style={{ fontSize:11,color:'var(--muted)',fontFamily:'var(--font-mono)',marginBottom:4 }}>{m.lbl}</div>
+                          <div style={{ fontWeight:700,fontSize:15,color:'var(--text)' }}>{m.val}</div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>
-              <p style={{ color:'var(--muted)',fontSize:14,marginBottom:20,maxWidth:640,lineHeight:1.7 }}>
-                Pay for the <strong>full track</strong>, a <strong>bundle</strong> of modules, or <strong>single modules</strong>. Open any course for full pricing and outlines.
-              </p>
-              {learnLoading ? (
-                <div className="card">Loading courses…</div>
-              ) : learnCourses.length === 0 ? (
-                <div className="card">No published courses yet. Check back soon.</div>
-              ) : (
-                <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))',gap:16 }}>
-                  {learnCourses.map((course) => (
-                    <div
-                      key={course.slug}
-                      className="card motion-in"
-                      style={{ cursor:'pointer',display:'flex',flexDirection:'column',minHeight:200 }}
-                      onClick={() => router.push(`/learn/${course.slug}`)}
+                  <div style={{ minWidth:160,textAlign:'right' }}>
+                    <div style={{ fontFamily:'var(--font-display)',fontWeight:900,fontSize:28,color:'var(--text)',marginBottom:4 }}>{c.price}</div>
+                    <div style={{ fontSize:12,color:'var(--muted)',marginBottom:16 }}>or 2 instalments (when open)</div>
+                    <button className="btn btn-outline" style={{ width:'100%',justifyContent:'center',marginBottom:8 }} onClick={()=>router.push('/apply')}>Cohort enrollment — Coming soon</button>
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      style={{ width:'100%',justifyContent:'center',fontSize:12, whiteSpace:'normal', textAlign:'center' }}
+                      onClick={() => document.getElementById('adhara-learn-path')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
                     >
-                      <span className="badge badge-open" style={{ alignSelf:'flex-start',marginBottom:10 }}>ADHARA LEARN</span>
-                      <h3 style={{ fontFamily:'var(--font-display)',fontWeight:800,fontSize:18,color:'var(--text)',marginBottom:8 }}>{course.title}</h3>
-                      <p style={{ fontSize:13,color:'var(--muted)',lineHeight:1.65,marginBottom:14,flex:1 }}>{course.description ?? '—'}</p>
-                      <div style={{ display:'flex',flexDirection:'column',gap:6,fontSize:12,color:'var(--muted)',fontFamily:'var(--font-mono)' }}>
-                        {learnPricingSummary(course).map((line, idx) => (
-                          <div key={idx} style={{ color:'var(--text)' }}>{line}</div>
-                        ))}
-                      </div>
-                      <div style={{ marginTop:14,fontSize:12,color:'var(--gold)',fontWeight:700 }}>View details →</div>
-                    </div>
-                  ))}
+                      Browse Adhara Learn →
+                    </button>
+                  </div>
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

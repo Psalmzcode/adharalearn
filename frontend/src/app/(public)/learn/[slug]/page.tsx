@@ -185,8 +185,8 @@ export default function LearnCoursePage({ params }: { params: { slug: string } }
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {((course as any).modules ?? []).map((m: any) => (
                       <div key={m.id} style={{ padding: 12, border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', background: 'var(--surface2)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start' }}>
-                          <div style={{ minWidth: 0 }}>
+                        <div className="learn-course-module-head">
+                          <div className="learn-course-module-main">
                             <div style={{ fontWeight: 800, fontSize: 13, color: 'var(--text)' }}>
                               Module {String(m.order).padStart(2, '0')} · {m.title}
                             </div>
@@ -195,7 +195,7 @@ export default function LearnCoursePage({ params }: { params: { slug: string } }
                                 {m.description}
                               </div>
                             )}
-                            <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            <div className="learn-course-lesson-list">
                               {((m.lessons ?? []) as any[]).slice(0, 5).map((l: any) => (
                                 <div key={l.id} className="learn-course-lesson-row">
                                   <div className="learn-course-lesson-title">
@@ -231,7 +231,7 @@ export default function LearnCoursePage({ params }: { params: { slug: string } }
                             </div>
                           </div>
 
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-end' }}>
+                          <div className="learn-course-module-side">
                             {m.isFree ? (
                               <span className="badge badge-open">Free</span>
                             ) : (

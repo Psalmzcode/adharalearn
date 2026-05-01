@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { PrismaClient, Role, CoursePurchaseStatus } = require('@prisma/client');
-const argon2 = require('argon2');
+const bcrypt = require('bcryptjs');
 
 if (!process.env.DATABASE_URL) {
   const envPath = path.join(process.cwd(), '.env.local');
@@ -19,13 +19,17 @@ if (!process.env.DATABASE_URL) {
 
 const prisma = new PrismaClient();
 
+// async function hash(pw) {
+//   return argon2.hash(pw, {
+//     type: argon2.argon2id,
+//     memoryCost: 65536,
+//     timeCost: 3,
+//     parallelism: 1,
+//   });
+// }
+
 async function hash(pw) {
-  return argon2.hash(pw, {
-    type: argon2.argon2id,
-    memoryCost: 65536,
-    timeCost: 3,
-    parallelism: 1,
-  });
+  return bcrypt.hash(pw, 10);
 }
 
 async function upsertUser({ email, password, firstName, lastName, role, phone }) {
@@ -41,7 +45,7 @@ async function main() {
   console.log('Seeding frontend auth + paid learner fixtures...');
 
   const admin = await upsertUser({
-    email: 'admin@adhara.edu.ng',
+    email: 'alisamuel325@gmail.com',
     password: 'Admin123!',
     firstName: 'Kemi',
     lastName: 'Adeyemi',

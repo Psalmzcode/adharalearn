@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AdharaLearnTracksSection } from '@/components/public/AdharaLearnTracksSection';
+import { BootcampLogo, PublicNavbar } from '@/components/public/PublicNavbar';
 
 const COHORTS = [
   { title:'Full-Stack Web Development', badge:'badge-web', badgeText:'💻 Web Dev', status:'● OPEN', spots:23, duration:'12 Weeks', format:'Online + Live', price:'₦85,000', desc:'From HTML to React + Node.js. Build 3 portfolio projects and graduate job-ready.' },
@@ -24,22 +25,9 @@ const FAQS = [
   { q:'What happens after the bootcamp?', a:'Graduates get access to our job placement network, portfolio review, LinkedIn profile optimisation, and referrals to our hiring partner companies.' },
 ];
 
-function BootcampLogo() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 50" height="44" width="220">
-      <rect x="1" y="4" width="38" height="40" rx="12" ry="14" fill="#1E7FD4"/>
-      <polygon points="20,10 23.5,18.5 33,18.5 25.5,24 28.5,33 20,27.5 11.5,33 14.5,24 7,18.5 16.5,18.5" fill="#F5C518"/>
-      <text x="46" y="33" fontFamily="Arial Black, sans-serif" fontWeight="900" fontSize="26" fill="#F2F4F8">Adhara</text>
-      <text x="153" y="14" fontFamily="Arial, sans-serif" fontWeight="700" fontStyle="italic" fontSize="12" fill="#1E7FD4">Edu</text>
-      <text x="46" y="46" fontFamily="Georgia, serif" fontStyle="italic" fontSize="9.5" fill="#A0B9DC" letterSpacing="0.3">Bootcamp</text>
-    </svg>
-  );
-}
-
 export default function BootcampHomePage() {
   const router = useRouter();
   const [openFaq, setOpenFaq] = useState<number|null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroAudienceIdx, setHeroAudienceIdx] = useState(0);
 
   useEffect(() => {
@@ -53,57 +41,7 @@ export default function BootcampHomePage() {
     <div style={{ background:'var(--bg)',minHeight:'100vh',color:'var(--text)',fontFamily:'var(--font-body)' }}>
       {/* Grid bg */}
       <div className="grid-bg" />
-      {/* Nav */}
-      <nav className="home-nav">
-        <button onClick={()=>router.push('/')} className="home-nav-logo"><BootcampLogo /></button>
-
-        <div className="home-nav-links">
-          {[
-            { label: 'Courses', href: '/courses' },
-            { label: 'How It Works', href: '#how' },
-            { label: 'Pricing', href: '/courses' },
-          ].map((l) => (
-            <a
-              key={l.label}
-              href={l.href}
-              className="home-nav-link"
-              onClick={(e) => {
-                if (l.href.startsWith('/')) { e.preventDefault(); router.push(l.href); }
-              }}
-            >
-              {l.label}
-            </a>
-          ))}
-        </div>
-
-        <div className="home-nav-actions">
-          <button className="btn btn-ghost btn-sm" onClick={()=>router.push('/login')}>Sign In</button>
-          <button className="btn btn-gold btn-sm" onClick={()=>router.push('/learn')}>Adhara Learn</button>
-          <button className="btn btn-outline btn-sm" onClick={()=>router.push('/signup')}>Sign up</button>
-        </div>
-
-        <button
-          className="home-nav-hamburger"
-          aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={mobileMenuOpen}
-          onClick={() => setMobileMenuOpen((s) => !s)}
-        >
-          <span className={`ham ${mobileMenuOpen ? 'open' : ''}`} />
-        </button>
-      </nav>
-
-      <div className={`home-nav-overlay ${mobileMenuOpen ? 'open' : ''}`} onClick={() => setMobileMenuOpen(false)} />
-      <div className={`home-nav-drawer ${mobileMenuOpen ? 'open' : ''}`}>
-        <div className="home-nav-drawer-inner">
-          <a className="home-nav-drawer-link" href="/courses" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); router.push('/courses'); }}>Courses</a>
-          <a className="home-nav-drawer-link" href="#how" onClick={() => setMobileMenuOpen(false)}>How it works</a>
-          <a className="home-nav-drawer-link" href="/learn" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); router.push('/learn'); }}>Adhara Learn</a>
-          <div className="home-nav-drawer-cta">
-            <button className="btn btn-gold btn-full" onClick={() => { setMobileMenuOpen(false); router.push('/login'); }}>Sign in →</button>
-            <button className="btn btn-ghost btn-full" onClick={() => { setMobileMenuOpen(false); router.push('/signup'); }}>Create account</button>
-          </div>
-        </div>
-      </div>
+      <PublicNavbar />
 
       {/* Hero */}
       <section style={{ position:'relative',minHeight:'100vh',display:'flex',alignItems:'center',paddingTop:64,overflow:'hidden' }}>

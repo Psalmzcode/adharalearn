@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import toast from 'react-hot-toast';
+import { ParticlesCanvas } from '@/components/public/ParticlesCanvas';
 
 function BootcampLogo() {
   return (
@@ -44,6 +45,7 @@ export default function LoginPage() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', padding: '80px 24px', position: 'relative', overflow: 'hidden', fontFamily: 'var(--font-body)' }}>
+      <ParticlesCanvas className="particles-canvas" />
       <div className="orb" style={{ width: 500, height: 500, background: 'var(--teal)', top: -200, right: -150 }} />
       <div className="orb" style={{ width: 400, height: 400, background: 'var(--gold)', bottom: -150, left: -100 }} />
       <div className="grid-bg" />
